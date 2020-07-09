@@ -4,10 +4,9 @@ const cors = require("cors")
 
 const app = express()
 
-var corsOptions = {
+var corsOptions = { // For Dev
   origin: "http://localhost:8081"
 }
-
 
 app.use(cors(corsOptions))
 
@@ -17,16 +16,16 @@ app.use(bodyParser.json())
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// Routes
-require("./app/routes/tutorial.routes.js")(app)
+// Main Router
+require("./app/router")(app)
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." })
+  res.json({ message: "Magic is happening" })
 })
 
 // Sync DB
-const db = require("./app/models")
+const db = require("./app/db/sequelizeDb")
 if(db.syncAtStart)
   db.sequelize.sync({ force: db.forceDbClean }) // Force drops and resyncs
 

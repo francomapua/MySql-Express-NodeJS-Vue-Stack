@@ -20,6 +20,7 @@ db.sequelize = sequelize
 db.syncAtStart = dbConfig.syncAtStart 
 db.forceDbClean = dbConfig.forceDbClean 
 
-db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize)
+// Models
+db.tutorials = require("../modules/tutorial/tutorial.model")(sequelize, Sequelize)
 
 module.exports = db
