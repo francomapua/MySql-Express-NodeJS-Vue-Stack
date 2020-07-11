@@ -3,6 +3,34 @@ const Crypto = require("../../utils//crypto/Crypto");
 const User = db.users;
 const Op = db.Sequelize.Op;
 
+exports.checkAuth = (tokenString) => {
+	var userId
+	return new Promise((resolve) => {
+		if (!tokenString) {
+			return resolve(false);
+		}
+		User.findOne({ where: { tokenString } })
+			.then((data) => {
+				if (!data || !data.id)
+					return resolve(false)
+				else{
+					userId = data.id
+					var now = new Date()
+					var expiry = data.tokenExpiry
+					return resolve(expiry.getTime() >= now.getTime())
+				}
+			})
+		})
+		.then(result =>{
+			if(!result && userId)
+				User.update(
+					{ tokenString: null, tokenExpiry: null },
+					{ where: { id: userId } }
+				)
+			return result
+		})
+};
+
 // Create and Save a new User
 exports.create = (req, res) => {
 	const username = req.body.username,
@@ -40,7 +68,7 @@ exports.create = (req, res) => {
 exports.login = (req, res) => {
 	const username = req.body.username,
 		password = req.body.password;
-
+	var role
 	if (!username || !password) {
 		res.status(400).send({
 			message: "Content can not be empty!",
@@ -56,20 +84,21 @@ exports.login = (req, res) => {
 			const hash = Crypto.hashPassword(user.salt, password);
 			if (hash !== user.hash) throw new Error(`Invalid Username or Password`);
 			tokenObject = Crypto.generateToken();
+			role = user.role
 			return User.update(tokenObject, { where: { id: user.id } });
 		})
 		.then((rowsUpdated) => {
 			if (rowsUpdated == 1) {
 				res.send({
 					token: tokenObject.tokenString,
+					role
 				});
 			} else {
 				throw new Error(`Could not log you in`);
 			}
 		})
 		.catch((err) => {
-			if(err.message == `Invalid Username or Password`)
-				err.status = 401
+			if (err.message == `Invalid Username or Password`) err.status = 401;
 			res.status(err.status || 500).send({
 				message: err.message || "Some error occurred while retrieving Users.",
 			});
@@ -89,23 +118,21 @@ exports.logout = (req, res) => {
 
 	User.findOne({ where: { username } })
 		.then((user) => {
-			if (!user || !user.tokenString){
+			if (!user || !user.tokenString) {
 				res.status(400).send({
 					message: "User is already logged out.",
 				});
-			}
-			else {
+			} else {
 				return User.update(
 					{ tokenString: null, tokenExpiry: null },
 					{ where: { id: user.id } }
-				)
-				.then((rowsUpdated) => {
+				).then((rowsUpdated) => {
 					if (rowsUpdated == 1) {
 						res.send({ message: `Logged out successfully` });
 					} else {
 						throw new Error(`Could not log you out`);
 					}
-				})
+				});
 			}
 		})
 		.catch((err) => {

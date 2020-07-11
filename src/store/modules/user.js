@@ -9,7 +9,8 @@ export const state = {
 };
 
 export const getters = {
-  token: (state) => state.token,
+	token: (state) => state.token,
+	role: (state) => state.token ? state.token.role : null,
   isAuthenticated: state => !!state.token,
 };
 
@@ -29,7 +30,7 @@ export const mutations = {
       headers: {
         'Access-Control-Allow-Origin': '*',
         "Content-type": "application/json",
-        "Authorization": (tokenObj ? `Basic ${tokenObj.token}` : 'null') 
+        "Authorization": (tokenObj ? `${tokenObj.token}` : 'null') 
       }
     });
     this._vm.$http = base
@@ -44,9 +45,9 @@ export const actions = {
 			.post(`/${path}/login`, data)
 			.then((response) => {
 				const token = response.data ? response.data.token : null;
+				const role = response.data ? response.data.role : null;
 				if (token) {
-					commit(`user`, {username : data.username} )
-					commit(`token`, {username : data.username, token});
+					commit(`token`, {username : data.username, token, role});
 				}
 			})
 			.catch((err) => {

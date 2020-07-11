@@ -18,11 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 // Main Router
 require("./app/router")(app)
-
-// simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Magic is happening" })
-})
+app.use(express.static('dist'))
 
 // Sync DB
 const db = require("./app/db/sequelizeDb")
