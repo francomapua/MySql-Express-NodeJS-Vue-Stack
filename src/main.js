@@ -10,6 +10,14 @@ Vue.use(IconsPlugin)
 
 Vue.config.productionTip = false
 
+vueRouter.beforeEach((to, from, next) => {
+  console.log('to :>> ', to)
+  console.log('from :>> ', from)
+  // TODO check auth
+  //Promise.all([store.dispatch(CHECK_AUTH)]).then(next)
+  next()
+});
+
 new Vue({
   router : vueRouter,
   render: h => h(App),

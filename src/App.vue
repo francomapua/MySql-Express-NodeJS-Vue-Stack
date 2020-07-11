@@ -1,21 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
-      <a href="#" class="navbar-brand">MySql-Express-Nove-VueJs</a>
-      <div class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a href="/tutorials" class="nav-link">Tutorials</a>
-        </li>
-        <li class="nav-item">
-          <a href="/add" class="nav-link">Add Tutorial</a>
-        </li>
-      </div>
-      <a href="#" class="btn btn-danger">hey </a>
-    </nav>
-
-    <div class="container mt-3">
-      <router-view />
-    </div>
+    <router-view />
   </div>
 </template>
 

@@ -22,5 +22,6 @@ db.forceDbClean = dbConfig.forceDbClean
 
 // Models
 db.tutorials = require("../modules/tutorial/tutorial.model")(sequelize, Sequelize)
+db.users = require("../modules/user/user.model")(sequelize, Sequelize)
 
 module.exports = db

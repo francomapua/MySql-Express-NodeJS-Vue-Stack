@@ -7,20 +7,33 @@ export default new Router({
   mode: "history",
   routes: [
     {
+      path: "/login",
+      name: "login",
+      component: () => import("./pages/LoginPage.vue")
+    },
+    
+    {
       path: "/",
-      alias: "/tutorials",
-      name: "tutorials",
-      component: () => import("./components/TutorialsList")
-    },
-    {
-      path: "/tutorials/:id",
-      name: "tutorial-details",
-      component: () => import("./components/Tutorial")
-    },
-    {
-      path: "/add",
-      name: "add",
-      component: () => import("./components/AddTutorial")
-    }
+      name: "home",
+      component: () => import('./pages/TutorialPage.vue'),
+      children: [
+        {
+          path: "/",
+          alias: "/tutorials",
+          name: "tutorials",
+          component: () => import("./components/TutorialsList")
+        },
+        {
+          path: "/tutorials/:id",
+          name: "tutorial-details",
+          component: () => import("./components/Tutorial")
+        },
+        {
+          path: "/add",
+          name: "add",
+          component: () => import("./components/AddTutorial")
+        }  
+      ]
+    } 
   ]
 })
