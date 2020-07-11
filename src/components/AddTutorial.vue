@@ -35,8 +35,6 @@
 </template>
 
 <script>
-import TutorialDataService from "../services/TutorialDataService"
-
 export default {
   name: "add-tutorial",
   data() {
@@ -57,7 +55,7 @@ export default {
         description: this.tutorial.description
       }
 
-      TutorialDataService.create(data)
+      this.$store.dispatch(`tutorial/createTutorial`, data)
         .then(response => {
           this.tutorial.id = response.data.id
           console.log(response.data)

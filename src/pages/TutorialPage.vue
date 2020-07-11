@@ -11,6 +11,7 @@
         </li>
       </div>
       <a href="#" class="btn btn-danger">hey </a>
+      <b-button @click="logout" variant="danger">Logout</b-button>
     </nav>
     <div class="container mt-3">
     <router-view></router-view>
@@ -20,7 +21,13 @@
 
 <script>
   export default {
-    
+    methods: {
+      logout(){
+        this.$store.dispatch(`user/logout`).then(() => {
+          this.$router.push('/login')
+        })
+      },
+    }
   }
 </script>
 

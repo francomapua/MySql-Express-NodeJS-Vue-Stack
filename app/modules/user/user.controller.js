@@ -68,7 +68,9 @@ exports.login = (req, res) => {
 			}
 		})
 		.catch((err) => {
-			res.status(500).send({
+			if(err.message == `Invalid Username or Password`)
+				err.status = 401
+			res.status(err.status || 500).send({
 				message: err.message || "Some error occurred while retrieving Users.",
 			});
 		});
