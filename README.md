@@ -1,8 +1,15 @@
-# mysql-express-nodejs-vue-stack
+# MySql-Express-NodeJS-Vue-Stack
 
 ## Project setup
 ```
 npm install
+```
+
+## Run Duv
+```
+npm run dev
+npm run dev-frontend
+npm run dev-backend
 ```
 
 ### Compiles and hot-reloads for development
